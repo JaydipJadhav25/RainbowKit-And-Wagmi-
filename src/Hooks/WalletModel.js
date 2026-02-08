@@ -1,30 +1,19 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import './App.css'
 import {
   useConnectModal,
   useAccountModal,
   useChainModal,
 } from '@rainbow-me/rainbowkit';
+export const useWalletModel = () => {
 
-
-
-function App() {
-
-
-
-   const { openConnectModal } = useConnectModal();
+  const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { openChainModal } = useChainModal();
- 
 
   return (
     <>
-      <ConnectButton/>
-
-
       {openConnectModal && (
         <button onClick={openConnectModal} type="button">
-          Open Connect Wallet
+          Open Connect Modal
         </button>
       )}
 
@@ -41,7 +30,5 @@ function App() {
       )}
 
     </>
-  )
-}
-
-export default App
+  );
+};
