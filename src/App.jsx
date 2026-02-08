@@ -5,6 +5,9 @@ import {
   useAccountModal,
   useChainModal,
 } from '@rainbow-me/rainbowkit';
+
+// import { Connector, useConnect, useConnectors } from 'wagmi'
+
 import { WalletButton } from '@rainbow-me/rainbowkit';
 
 
@@ -12,17 +15,66 @@ import { WalletButton } from '@rainbow-me/rainbowkit';
 
 function App() {
 
+  // const { connect } = useConnect()
+  // const connectors = useConnectors()
+
+
 
 
    const { openConnectModal } = useConnectModal();
   const { openAccountModal } = useAccountModal();
   const { openChainModal } = useChainModal();
+
+
+
+    
  
 
   return (
       <>  
      
+     {/* <div>
+      <h1>connect</h1>
+       {
+
+    connectors.map((connector) => (
+    <button key={connector.uid} onClick={() => connect({ connector })}>
+      {connector.name}
+    </button>
+  ))
+    
+     }
+     </div> */}
+
+
+     <hr />
+
     <WalletButton wallet="metamask" />
+    <ConnectButton accountStatus="avatar" />
+    <ConnectButton accountStatus="address" />
+    <ConnectButton chainStatus="icon" />
+
+
+<ConnectButton chainStatus="none" />
+
+
+    <hr />
+
+    <ConnectButton
+  accountStatus={{
+    smallScreen: 'avatar',
+    largeScreen: 'full',
+  }}
+/>
+<hr />
+
+<ConnectButton
+  showBalance={{
+    smallScreen: true,
+    largeScreen: true,
+  }}
+/>
+<hr />
 
 
 

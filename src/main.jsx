@@ -15,6 +15,8 @@ import {
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
+import { authenticationAdapter } from './Hooks/authenticationAdapter.js';
+// import { metaMask } from 'wagmi/connectors';
 
 
 //config
@@ -52,6 +54,9 @@ createRoot(document.getElementById('root')).render(
         appName: 'RainbowKit Demo',
         disclaimer: Disclaimer,
       }}
+       coolMode={true}
+       adapter={authenticationAdapter}
+        status="unauthenticated"
         >
            <App/>
         </RainbowKitProvider>
