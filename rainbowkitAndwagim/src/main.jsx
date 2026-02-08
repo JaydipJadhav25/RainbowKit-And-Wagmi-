@@ -17,6 +17,7 @@ import './index.css'
 import App from './App.jsx'
 import { authenticationAdapter } from './Hooks/authenticationAdapter.js';
 // import { metaMask } from 'wagmi/connectors';
+import {BrowserRouter } from "react-router-dom"
 
 
 //config
@@ -25,41 +26,21 @@ const config = getDefaultConfig({
   appName: 'DApp',
   projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
   chains: [sepolia],
-  ssr: true, // If your dApp uses server side rendering (SSR)
+  ssr: false,//  client side 
 });
 
-const Disclaimer = ({ Text, Link }) => (
-  <Text>
-    By connecting your wallet, you agree to the{' '}
-    <Link href="https://termsofservice.xyz">Terms of Service</Link> and
-    acknowledge you have read and understand the protocol{' '}
-    <Link href="https://disclaimer.xyz">jaydip</Link>
-  </Text>
-);
 
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
+  <BrowserRouter>
      <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider 
-        modalSize='compact'
-        theme={darkTheme({
-        accentColor: '#7b3fe4',
-        accentColorForeground: 'white',
-        borderRadius: 'medium',
-      })}
-       appInfo={{
-        appName: 'RainbowKit Demo',
-        disclaimer: Disclaimer,
-      }}
-       coolMode={true}
-       adapter={authenticationAdapter}
-        status="unauthenticated"
-        >
+        <RainbowKitProvider modalSize='wide'>
            <App/>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
+  </BrowserRouter>
 )
