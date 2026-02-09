@@ -1,5 +1,6 @@
 import {Router} from "express"
-import { getUserNonce } from "../controller/user.controller.js";
+import { getUserNonce, getUserProfile, userVerifyMessage } from "../controller/user.controller.js";
+import { useAuth } from "../middlewares/auth.js";
 
 
 const router = Router();
@@ -12,6 +13,13 @@ router.get("/" , (req, res) =>{
 
 //nonce
 router.post("/nonce" , getUserNonce);
+//verify 
+router.post("/verify" , userVerifyMessage );
+
+
+router.get("/me" , useAuth ,getUserProfile);
+
+
 
 
 export default router;
