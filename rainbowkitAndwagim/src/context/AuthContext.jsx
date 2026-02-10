@@ -22,7 +22,7 @@ axios.defaults.withCredentials = true;
 
 const AuthContextProider = ({ children }) => {
   //definde state
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);//all info about user
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   //   const { account, signMessage } = useWeb3();
@@ -38,6 +38,9 @@ const AuthContextProider = ({ children }) => {
   const loadUser = async () => {
     try {
       const response = await axios.get(`${API_URL}/me`);
+      
+      console.log("loadUser : " , response);
+
       setUser(response.data.data.user);
       setIsAuthenticated(true);
     } catch (error) {
@@ -93,12 +96,64 @@ const AuthContextProider = ({ children }) => {
   };
 
 
+  // Complete profile
+  const completeProfile = async (name, role="teacher") => {
+    try {
+      setLoading(true);
+
+      const response = await axios.post(`${API_URL}/complete-profile`, {
+        name,
+        role,
+      });
+
+      console.log("compelete profile respponse : " , response);
+
+
+      const userData = response.data.data.user;
+      setUser(userData);
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      console.error('Profile completion error:', error);
+      const message = error.response?.data?.message || 'Failed to complete profile';
+      return {
+        success: false,
+        error: message,
+      };
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+
+
+
+    // Logout
+  const logout = async () => {
+    try {
+      await axios.get(`${API_URL}/logout`);
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
+  };
+
+
+
   //best pratise
   const value = {
     user,
     isAuthenticated,
     loading,
     loginWithWallet,
+    completeProfile,
+    logout
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

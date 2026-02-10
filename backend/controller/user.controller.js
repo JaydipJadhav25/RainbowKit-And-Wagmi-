@@ -157,21 +157,96 @@ const userVerifyMessage = async (req, res) => {
   }
 };
 
-const getUserProfile = async (req, res) => {
-  const user = req.user;
 
-  //return user info
-  return res.status(200).json({
-    message: "fetch user profile successfully",
-    user: {
-      id: user._id,
-      walletAddress: user.walletAddress,
-      name: user.name,
-      role: user.role,
-      isProfileComplete: user.isProfileComplete,
-      nonce : user.nonce
-    },
+const completeProfile = async(req , res) =>{
+   try {
+    const { name, role } = req.body;
+
+
+    console.log("data:", name , role);
+
+
+    if (!name || !role) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name and role are required'
+      });
+    }
+
+    // Validate role
+    const validRoles = ['teacher', 'authority', 'examCenter'];
+    //check role is correct or not
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid role. Must be teacher, authority, or examCenter'
+      });
+    }
+
+    // Update user
+    //req.user is not simple obj this is mongodb obje
+    //so we can update and save without any other database call
+    req.user.name = name;
+    req.user.role = role;
+    req.user.isProfileComplete = true;
+    await req.user.save();
+
+    res.status(200).json({
+      success: true,
+      data: {
+        user: {
+          id: req.user._id,
+          walletAddress: req.user.walletAddress,
+          name: req.user.name,
+          role: req.user.role,
+          isProfileComplete: req.user.isProfileComplete
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Profile completion error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+}
+
+
+
+
+const logout  = async(req , res) =>{
+    res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none'
   });
+
+  res.status(200).json({
+    success: true,
+    message: 'Logged out successfully'
+  });
+}
+
+
+
+const getUserProfile = async (req, res) => {
+
+   res.status(200).json({
+    success: true,
+    data: {
+      user: {
+        id: req.user._id,
+        walletAddress: req.user.walletAddress,
+        name: req.user.name,
+        role: req.user.role,
+        isProfileComplete: req.user.isProfileComplete
+      }
+    }
+  });
+
 };
 
-export { getUserNonce, userVerifyMessage, getUserProfile };
+
+export { getUserNonce, userVerifyMessage, getUserProfile  , completeProfile  , logout};

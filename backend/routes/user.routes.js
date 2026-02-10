@@ -1,5 +1,5 @@
 import {Router} from "express"
-import { getUserNonce, getUserProfile, userVerifyMessage } from "../controller/user.controller.js";
+import { completeProfile, getUserNonce, getUserProfile, logout, userVerifyMessage } from "../controller/user.controller.js";
 import { useAuth } from "../middlewares/auth.js";
 
 
@@ -19,7 +19,8 @@ router.post("/verify" , userVerifyMessage );
 
 router.get("/me" , useAuth ,getUserProfile);
 
-
+router.post("/complete-profile" , useAuth , completeProfile)
+router.get("/logout" , useAuth , logout);
 
 
 export default router;
