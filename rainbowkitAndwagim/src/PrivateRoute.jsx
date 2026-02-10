@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext';
 const PrivateRoute = ({ children, roles = [], requireCompleteProfile = true }) => {
   const { isAuthenticated, user, loading } = useAuth();
   const location = useLocation();
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

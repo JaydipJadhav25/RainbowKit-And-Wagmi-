@@ -9,6 +9,7 @@ export const authenticationAdapter = createAuthenticationAdapter({
     return "12345678";
   },
 
+  
   createMessage: ({ nonce, address, chainId }) => {
     return createSiweMessage({
       domain: window.location.host,
